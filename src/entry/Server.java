@@ -1,32 +1,30 @@
 package entry;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import helper.HttpHeader;
-
 public class Server {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		ServerSocket server = null;
 		try {
-			ServerSocket server = new ServerSocket(8080);
-			Socket sck = server.accept();
-			InputStream is = sck.getInputStream();
-			byte[] reading = is.readAllBytes();
-			String str = new String(reading);
-			HttpHeader header = new HttpHeader(str);
-			System.out.println(header.method);
-			System.out.println(header.httpVersion);
-			System.out.println(header.host);
-			System.out.println(header.path);
-			System.out.println(str);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			server = new ServerSocket(8080);
+		} catch (IOException e1) {
+			return;
 		}
-
+		while(true)
+			try {
+				Socket sck = server.accept();
+				Thread th = new Thread(new RequestHandler(sck));
+				th.start();
+				System.out.println("Started");
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				break;
+			}
+		server.close();
 	}
 
 }
