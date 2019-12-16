@@ -161,6 +161,9 @@ public class HttpHeader {
 		}
 		throw new IllegalArgumentException("Wrong method");
 	}
+	public boolean existsCookie() {
+		return !cookies.isEmpty();
+	}
 	//public List<String> getCookies(){
 		
 //	}
@@ -174,5 +177,9 @@ public class HttpHeader {
 			str+=s + " " +cookies.get(s)+"\\";
 		}
 		return str;
+	}
+	public String getCookie(String cookie) {
+		return cookies.get(cookie);
+		
 	}
 }
